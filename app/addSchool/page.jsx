@@ -12,7 +12,7 @@ export default function AddSchool() {
     try {
       setLoading(true);
 
-      // 1) Upload image to Cloudinary
+    
       const f = getValues("image")?.[0];
       if (!f) { alert("Please select an image"); return; }
 
@@ -22,7 +22,7 @@ export default function AddSchool() {
       const upJson = await upRes.json();
       if (!upRes.ok) { alert(upJson.error || "Image upload failed"); return; }
 
-      // 2) Send only text fields + Cloudinary URL (no FileList in JSON)
+      
       const { name, address, city, state, contact, email_id } = getValues();
       const payload = { name, address, city, state, contact, email_id, image: upJson.url };
 
@@ -32,15 +32,17 @@ export default function AddSchool() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        alert(err.error || "Failed to add school");
-        return;
-      }
+     if (!res.ok) {
+       const errText = await res.text(); 
+       console.error("Add school failed:", errText);
+       alert("Failed: " + errText);
+       return;
+     }
+
 
       alert("School added successfully!");
       reset();
-      if (fileRef.current) fileRef.current.value = ""; // clear file input
+      if (fileRef.current) fileRef.current.value = ""; 
     } catch (err) {
       console.error(err);
       alert("Something went wrong");

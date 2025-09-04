@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 export async function POST(req) {
   try {
     const form = await req.formData();
-    const file = form.get("file"); // client must send as "file"
+    const file = form.get("file");
 
     if (!file || typeof file === "string") {
       return new Response(JSON.stringify({ error: "No file received" }), { status: 400 });

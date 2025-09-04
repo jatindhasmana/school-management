@@ -27,24 +27,14 @@ export default function ShowSchools() {
     <div className="min-h-screen bg-gradient-to-tr from-indigo-50 to-blue-100 p-8">
       <h1 className="text-4xl font-bold text-center mb-8 text-indigo-700">Schools</h1>
       <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {schools.map((s) => {
-          const imgSrc = s.image ? `/schoolImages/${s.image}` : "/schoolImages/default.jpg";
-          return (
-            <div
-              key={s.id}
-              className="bg-white rounded-2xl shadow-md hover:shadow-xl transform hover:-translate-y-1 transition p-4"
-            >
-              <img
-                src={imgSrc}
-                alt={s.name}
-                className="w-full h-48 object-cover rounded-xl mb-4 transition-transform duration-300 hover:scale-105"
-              />
-              <h2 className="text-xl font-semibold text-gray-800">{s.name}</h2>
-              <p className="text-gray-600">{s.address}</p>
-              <p className="text-gray-500">{s.city}</p>
-            </div>
-          );
-        })}
+        {schools.map((s) => (
+          <div key={s.id} className="bg-white rounded-2xl shadow-md hover:shadow-xl transform hover:-translate-y-1 transition p-4">
+            <img src={s.image || "/schoolImages/default.jpg"} alt={s.name} className="w-full h-48 object-cover rounded-xl mb-4 transition-transform duration-300 hover:scale-105" />
+            <h2 className="text-xl font-semibold text-gray-800">{s.name}</h2>
+            <p className="text-gray-600">{s.address}</p>
+            <p className="text-gray-500">{s.city}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

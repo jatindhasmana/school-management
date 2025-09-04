@@ -1,5 +1,5 @@
-// app/api/dbcheck/route.js
-export const runtime = "nodejs";           // ensure not Edge
+
+export const runtime = "nodejs";           
 
 import { getDB } from "@/lib/db";
 

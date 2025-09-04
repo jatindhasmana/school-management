@@ -1,6 +1,4 @@
 import { v2 as cloudinary } from "cloudinary";
-import multer from "multer";
-import nextConnect from "next-connect";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,31 +6,26 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const upload = multer({ storage: multer.memoryStorage() });
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-const apiRoute = nextConnect({
-  onError(error, req, res) {
-    res.status(501).json({ error: error.message });
-  },
-  onNoMatch(req, res) {
-    res.status(405).json({ error: `Method ${req.method} Not Allowed` });
-  },
-});
-
-apiRoute.use(upload.single("file"));
-
-apiRoute.post(async (req, res) => {
+export async function POST(req) {
   try {
-    const fileStr = req.file.buffer.toString("base64");
-    const result = await cloudinary.uploader.upload(`data:${req.file.mimetype};base64,${fileStr}`);
-    res.status(200).json({ url: result.secure_url });
+    const form = await req.formData();
+    const file = form.get("file"); // client must send as "file"
+
+    if (!file || typeof file === "string") {
+      return new Response(JSON.stringify({ error: "No file received" }), { status: 400 });
+    }
+
+    const ab = await file.arrayBuffer();
+    const base64 = Buffer.from(ab).toString("base64");
+    const dataUri = `data:${file.type};base64,${base64}`;
+
+    const result = await cloudinary.uploader.upload(dataUri);
+    return new Response(JSON.stringify({ url: result.secure_url }), { status: 200 });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Cloudinary upload error:", err);
+    return new Response(JSON.stringify({ error: err.message || "Upload failed" }), { status: 500 });
   }
-});
-
-export default apiRoute;
-
-export const config = {
-  api: { bodyParser: false },
-};
+}

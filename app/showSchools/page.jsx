@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function ShowSchools() {
@@ -34,9 +34,11 @@ export default function ShowSchools() {
             key={s.id}
             className="bg-white rounded-2xl shadow-md hover:shadow-xl transform hover:-translate-y-1 transition p-4"
           >
-            <img
+            <Image
               src={s.image || "/schoolImages/default.jpg"}
               alt={s.name}
+              width={400}
+              height={200}
               className="w-full h-48 object-cover rounded-xl mb-4 transition-transform duration-300 hover:scale-105"
             />
             <h2 className="text-xl font-semibold text-gray-800">{s.name}</h2>

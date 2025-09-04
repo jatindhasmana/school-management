@@ -56,89 +56,37 @@ export default function AddSchool() {
         </h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          
+          {/* Floating Label Input */}
+          {[
+            { id: "name", label: "School Name", type: "text", required: "School name is required" },
+            { id: "address", label: "Address", type: "text", required: "Address is required" },
+            { id: "city", label: "City", type: "text", required: "City is required" },
+            { id: "state", label: "State", type: "text", required: "State is required" },
+            { id: "contact", label: "Contact Number", type: "number", required: "Contact is required" },
+            { id: "email_id", label: "Email Address", type: "email", required: "Email is required" },
+          ].map((field) => (
+            <div key={field.id} className="relative">
+              <input
+                type={field.type}
+                id={field.id}
+                {...register(field.id, { required: field.required })}
+                placeholder=" "
+                className="peer w-full px-4 pt-5 pb-2 border rounded-lg focus:ring-2 focus:ring-violet-500 placeholder-transparent"
+              />
+              <label
+                htmlFor={field.id}
+                className="absolute left-3 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:text-sm peer-focus:text-violet-600"
+              >
+                {field.label}
+              </label>
+              {errors[field.id] && (
+                <p className="text-red-500 text-sm mt-1">{errors[field.id].message}</p>
+              )}
+            </div>
+          ))}
+
+          {/* File Input (floating label not ideal, keep simple) */}
           <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              School Name
-            </label>
-            <input
-              type="text"
-              {...register("name", { required: "School name is required" })}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-violet-500"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-            )}
-          </div>
-
-          
-          <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Address
-            </label>
-            <input
-              type="text"
-              {...register("address", { required: "Address is required" })}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-violet-500"
-            />
-            {errors.address && (
-              <p className="text-red-500 text-sm mt-1">{errors.address.message}</p>
-            )}
-          </div>
-
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                City
-              </label>
-              <input
-                type="text"
-                {...register("city", { required: "City is required" })}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-violet-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                State
-              </label>
-              <input
-                type="text"
-                {...register("state", { required: "State is required" })}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-violet-500"
-              />
-            </div>
-          </div>
-
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Contact Number
-              </label>
-              <input
-                type="number"
-                {...register("contact", { required: "Contact is required" })}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-violet-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email Address
-              </label>
-              <input
-                type="email"
-                {...register("email_id", { required: "Email is required" })}
-                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-violet-500"
-              />
-            </div>
-          </div>
-
-          
-          <div className="relative">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              School Image
-            </label>
             <input
               type="file"
               accept="image/*"
